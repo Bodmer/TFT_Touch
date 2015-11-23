@@ -2,7 +2,7 @@
 Arduino touch screen library for XPT2046
 
 This library has been tested on a 2.4" TFT screen that uses
-the ILI9341 display driver and XPT2046 tocuh controller.
+the ILI9341 display driver and XPT2046 touch controller.
 
 These displays are available at low cost on eBay and AliExpress.
 
