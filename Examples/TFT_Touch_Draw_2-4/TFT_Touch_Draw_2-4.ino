@@ -5,9 +5,6 @@
 
   Uses font 2 only
 
-  The example will read the current state of the touch screen and output it to the serial
-  port as raw X and Y coordinates, as the current position in pixels and a zone number.
-
   Created by Rowboteer: 22/11/15
 */
 
