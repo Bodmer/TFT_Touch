@@ -11,6 +11,9 @@ The library includes two sketches:
     * TFT_Touch_Calibrate: to calibrate and test the screen
     * TFT_Touch_Draw_2-4 : a simple paint program
 
+To make things really easy the claibration sketch reports the setup()
+calibration code to use in your sketch via a serial port message.
+
 The library could be used with any graphics library but the examples
 use this one:
 
