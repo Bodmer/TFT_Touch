@@ -90,7 +90,7 @@ void loop()
     Serial.print("Raw x,y = ");
     Serial.print(X_Raw);
     Serial.print(",");
-    Serial.print(Y_Raw);
+    Serial.println(Y_Raw);
     delay(10);
   }
   delay(10);
