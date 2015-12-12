@@ -6,10 +6,11 @@ the ILI9341 display driver and XPT2046 touch controller.
 
 These displays are available at low cost on eBay and AliExpress.
 
-The library includes two sketches:
+The library includes three sketches:
 
     * TFT_Touch_Calibrate: to calibrate and test the screen
     * TFT_Touch_Draw_2-4 : a simple paint program
+    * TFT_Touch_Raw      : a touch screen test sketch (Serial Monitor output only)
 
 To make things really easy the calibration sketch reports the setup()
 calibration code to use in your sketch via a serial port message.
