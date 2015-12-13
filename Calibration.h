@@ -10,16 +10,14 @@
 
 // These are the resolution figures when the TFT is in "portrait" orientation
 // If these are set correctly the SetCal() function does not need to be called in sketch
-#define _XRES 240 /* Default screen resolution for width */
-#define _YRES 320 /* Default screen resolution for height */
+#define _XRES 320 /* Default screen resolution for width */
+#define _YRES 240 /* Default screen resolution for height */
 
-
+#define _XYSWAP 0       /* Swap x and y coordinates */
+#define _XFLIP  0       /* Set to 0 for normal or 1 to flip x coordinates */
+#define _YFLIP  0       /* Set to 0 for normal or 1 to flip y coordinates */
 
 #define _ROTATION 1    /* Set default screen orientation 0 to 3 */
-
-#define _XFLIP 0       /* Set to 0 for normal or 1 to flip x coordinates */
-#define _YFLIP 0       /* Set to 0 for normal or 1 to flip y coordinates */
-
 
 // When a touch is detected the library samples x and y twice
 // The two x and two y values must be within RAWERR of each other

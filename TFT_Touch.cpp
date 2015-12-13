@@ -194,22 +194,22 @@ void TFT_Touch::setRotation(byte rotation)
 {
   switch(rotation) {
     case 0:
-      _axis = 1;
+      _axis  = !_XYSWAP;
       _xflip = !_XFLIP;
       _yflip = _YFLIP;
       break;
     case 1:
-      _axis = 0;
+      _axis  = _XYSWAP;
       _xflip = _XFLIP;
       _yflip = _YFLIP;
       break;
     case 2:
-      _axis = 1;
+      _axis  = !_XYSWAP;
       _xflip = _XFLIP;
       _yflip = !_YFLIP;
       break;
     case 3:
-      _axis = 0;
+      _axis  = _XYSWAP;
       _xflip = !_XFLIP;
       _yflip = !_YFLIP;
       break;
