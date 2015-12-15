@@ -5,6 +5,13 @@
 
   Uses font 2 only
 
+  The example will read the current state of the touch screen and output it to the serial
+  port as raw X and Y coordinates, as the current position in pixels and a zone number.
+
+  >>>> YOU MUST CALIBRATE THE TOUCH SCREEN AND COPY THE SETTINGS TO LINE 48 OF THIS SKETCH <<<<
+
+  >>>>        YOU MUST CHANGE THE PIN DEFINITION AT LINES 29-32 TO SUIT YOUR SETUP         <<<<
+
   Created by Rowboteer: 22/11/15
 */
 
@@ -18,11 +25,11 @@
 // Invoke custom TFT driver library
 TFT_ILI9341 tft = TFT_ILI9341();       // Invoke custom library
 
-// These are the pins used to interface between the 2046 touch controller and Arduino Mega
-#define DOUT A0  /* Data out pin of touch screen, direct connection */
-#define DIN  A1  /* Data in pin of touch screen via 10K series resistor */
-#define DCS  A2  /* Chip select pin of touch screen via 10K series resistor*/
-#define DCLK A3  /* Clock pin of touch screen via 10K series resistor*/
+// These are the pins used to interface between the 2046 touch controller and Arduino Pro
+#define DOUT A0  /* Data out pin (T_DO) of touch screen */
+#define DIN  A2  /* Data in pin (T_DIN) of touch screen */
+#define DCS  9  /* Chip select pin (T_CS) of touch screen */
+#define DCLK 8  /* Clock pin (T_CLK) of touch screen */
 
 /* Create an instance of the touch screen library */
 TFT_Touch touch = TFT_Touch(DCS, DCLK, DIN, DOUT);
@@ -35,10 +42,13 @@ unsigned int colors[10] = {TFT_RED, TFT_GREEN, TFT_BLUE, TFT_BLACK, TFT_CYAN, TF
 
 void setup()
 {
-  //Serial.begin(38400);
+  Serial.begin(38400);
 
   tft.init();
 
+  //This is the calibration line produced by the TFT_Touch_Calibrate_v2 sketch
+  touch.setCal(481, 3395, 755, 3487, 320, 240, 1);
+  
   // Set the TFT and touch screen to landscape orientation
   tft.setRotation(1);
   touch.setRotation(1);
@@ -46,9 +56,6 @@ void setup()
   tft.setTextSize(1);
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_GREEN);
-  
-  //This is the calibration line produced by the TFT_Touch_Calibrate sketch
-  touch.setCal(317, 3934, 157, 3752, 240, 320);
 
   //Draw the pallet
   for (int i = 0; i < 10; i++)
@@ -85,6 +92,8 @@ void loop()
     X_Coord = touch.X();
     Y_Coord = touch.Y();
 
+    Serial.print(X_Coord); Serial.print(","); Serial.println(Y_Coord);
+    
     // Detect  paint brush color change
     if (Y_Coord < ColorPaletteHigh + 2)
     {

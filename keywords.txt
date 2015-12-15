@@ -10,4 +10,4 @@ Zone		KEYWORD2
 setResolution	KEYWORD2
 setCal		KEYWORD2
 setRotation	KEYWORD2
-
+ReadCal		KEYWORD2

@@ -1,7 +1,6 @@
 /*
 This is a sketch to calibrate the screem and list the values to use in the
-setCal() function, or to set as defaults in the Calibratio.h file within
-the TFT_Touch library.
+setCal() function.
 
 The calibration report is sent to the Serial port at 38400 baud.
 
@@ -12,6 +11,11 @@ Uses font 2 only.
 
 Created by Rowboteer for the ILI9341 3.4" 320 x 240 TFT touch display: 22/11/15
 */
+
+// TFT Screen pixel resolution in landscape orientation, change these to suit your display
+// Defined in landscape orientation !
+#define HRES 320
+#define VRES 240
 
 // Call up the TFT driver library
 #include <TFT_ILI9341.h> // Hardware-specific TFT library
@@ -35,18 +39,6 @@ TFT_ILI9341 tft = TFT_ILI9341();       // Invoke custom library
 /* Create an instance of the touch screen library */
 TFT_Touch touch = TFT_Touch(DCS, DCLK, DIN, DOUT);
 
-// These are the default min and maximum values,
-// they are set to 0 and 4095 to calibrate the screen
-#define XMIN 0    /* Default raw X axis measurement for Left of visible screen */
-#define XMAX 4095 /* Default raw X axis measurement for Right of visible screen */
-#define YMIN 0    /* Default raw Y axis measurement for bottom of visible screen */
-#define YMAX 4095 /* Default raw Y axis measurement for top of visible screen */
-
-// This is the screen size for the raw to coordinate transformation
-// width and height specified for LANDSCAPE orientation
-#define HRES 320 /* Default screen resulution for horizontal axis */
-#define VRES 240 /* Default screen resulution for vertical axis */
-
 int X_Raw = 0, Y_Raw = 0;
 
 void setup()
@@ -62,26 +54,26 @@ void setup()
 
   tft.setTextDatum(TC_DATUM);  // Set text plotting reference datum to Top Centre (TC)
   tft.setTextColor(TFT_WHITE, TFT_BLACK); // Set text to white on black
-
-  Serial.println("TFT_Touch Calibration, follow TFT screen prompts..");
 }
 
 /* Main program */
 void loop()
 {
-  int xlo, ylo;
-  int xhi, yhi;
-  int xlo2, yhi2;
-  
-  // Reset the min and max calibration values
-  touch.setCal(XMIN, XMAX, YMIN, YMAX, VRES, HRES);
+  int x1, y1;
+  int x2, y2;
+  int x3, y3;
+  bool xyswap  = 0, xflip = 0, yflip = 0;
+
+  Serial.println("TFT_Touch Calibration, follow TFT screen prompts..");
+    
+  // Reset the calibration values
+  touch.setCal(0, 4095, 0, 4095, 320, 240, 0);//, 0, 0);
   
   // Set TFT the screen to landscape orientation
   tft.setRotation(1);
   
-  // Keep the touch screen orientation as 0 ***for calibration only***
-  // normally the tft and touch rotations would be the same
-  touch.setRotation(0);
+  // Set Touch the screen to the same landscape orientation
+  touch.setRotation(1);
 
   // Clear the screen
   tft.fillScreen(TFT_BLACK);
@@ -96,106 +88,117 @@ void loop()
   getCoord(); // This function assigns values to X_Raw and Y_Raw
 
   drawCross(30, 30, TFT_BLACK);
-  Serial.print("First point : Coord x,y = ");
+  Serial.print("First point : Raw x,y = ");
   Serial.print(X_Raw);
   Serial.print(",");
   Serial.println(Y_Raw);
 
-  xlo = X_Raw;
-  ylo = Y_Raw;
+  x1 = X_Raw;
+  y1 = Y_Raw;
 
-  drawCross(160, 120, TFT_RED);
+  drawCross(HRES/2, VRES/2, TFT_RED);
   delay(10);
   
   while (getCoord()); // This waits for the centre area to be touched
   
-  drawCross(160, 120, TFT_BLACK);
-  Serial.print("Second point : Coord x,y = ");
+  drawCross(HRES/2, VRES/2, TFT_BLACK);
+  Serial.print("Second point : Raw x,y = ");
   Serial.print(X_Raw);
   Serial.print(",");
   Serial.println(Y_Raw);
 
-  drawCross(290, 210, TFT_RED);
+  drawCross(HRES-30, VRES-30, TFT_RED);
   
   while (!getCoord()); // This waits until the centre area is no longer pressed
   delay(10);           // Wait a little for touch bounces to stop after release
   
   getCoord();
-  drawCross(290, 210, TFT_BLACK);
-  Serial.print("Third point : Coord x,y = ");
+  drawCross(HRES-30, VRES-30, TFT_BLACK);
+  Serial.print("Third point : Raw x,y = ");
   Serial.print(X_Raw);
   Serial.print(",");
   Serial.println(Y_Raw);
 
-  xhi = X_Raw;
-  yhi = Y_Raw;
+  x2 = X_Raw;
+  y2 = Y_Raw;
 
-  drawCross(160, 120, TFT_RED);
+  drawCross(HRES/2, VRES/2, TFT_RED);
   delay(10);
   
   while (getCoord()); // This waits for the centre area to be touched
   
-  drawCross(160, 120, TFT_BLACK);
-  Serial.print("Fourth point : Coord x,y = ");
+  drawCross(HRES/2, VRES/2, TFT_BLACK);
+  Serial.print("Fourth point : Raw x,y = ");
   Serial.print(X_Raw);
   Serial.print(",");
   Serial.println(Y_Raw);
 
-  drawCross(30, 210, TFT_RED);
+  drawCross(30, VRES-30, TFT_RED);
   
   while (!getCoord()); // This waits until the centre area is no longer pressed
   delay(10);           // Wait a little for touch bounces to stop after release
   
   getCoord();
-  drawCross(30, 210, TFT_BLACK);
-  Serial.print("Fifth point : Coord x,y = ");
+  drawCross(30, VRES-30, TFT_BLACK);
+  Serial.print("Fifth point : Raw x,y = ");
   Serial.print(X_Raw);
   Serial.print(",");
   Serial.println(Y_Raw);
 
-  xlo2 = X_Raw;
-  yhi2 = Y_Raw;
+  x3 = X_Raw;
+  y3 = Y_Raw;
 
   int temp;
-  if (xhi < xlo) {
-    temp = xlo;
-    xlo = xhi;
-    xhi = temp;
+  if (abs(x1 - x3) > 1000) {
+    xyswap = 1;
+    temp = x1; x1 = y1; y1 = temp;
+    temp = x2; x2 = y2; y2 = temp;
+    temp = x3; x3 = y3; y3 = temp;
   }
-  if (yhi < ylo) {
-    temp = ylo;
-    ylo = yhi;
-    yhi = temp;
-  }
+  else xyswap = 0;
+  
 
-  int xmin = xlo - (xhi - xlo) * 3 / 18;
-  int xmax = xhi + (xhi - xlo) * 3 / 18;
+  //if (x2 < x1) {
+  //  temp = x2; x2 = x1; x1 = temp;
+  //  xflip = 1;
+  //}
+  
+  //if (y2 < y1) {
+  //  temp = y2; y2 = y1; y1 = temp;
+  //  yflip = 1;
+  //}
 
-  int ymin = ylo - (yhi - ylo) * 3 / 26;
-  int ymax = yhi + (yhi - ylo) * 3 / 26;
+  int hmin = x1;// - (x2 - x1) * 3 / (HRES/10 - 6);
+  int hmax = x2;// + (x2 - x1) * 3 / (HRES/10 - 6);
 
-  Serial.println();
-  Serial.println("These are the values you can use in Calibration.h");
-  Serial.print("#define _XMIN ");
-  Serial.println(xmin);
-  Serial.print("#define _YMIN ");
-  Serial.println(ymin);
+  int vmin = y1;// - (y2 - y1) * 3 / (VRES/10 - 6);
+  int vmax = y2;// + (y2 - y1) * 3 / (VRES/10 - 6);
 
-  Serial.print("#define _XMAX ");
-  Serial.println(xmax);
-  Serial.print("#define _YMAX ");
-  Serial.println(ymax);
+ // Serial.println();
+ // Serial.println("These are the values you can use in Calibration.h");
+ // Serial.print("#define _XMIN ");
+ // Serial.println(xmin);
+ // Serial.print("#define _YMIN ");
+ // Serial.println(ymin);
+
+ // Serial.print("#define _XMAX ");
+ // Serial.println(xmax);
+ // Serial.print("#define _YMAX ");
+ // Serial.println(ymax);
 
   Serial.println();
   Serial.println("  //This is the calibration line to use in your sketch");
   Serial.println("  //you can copy and paste into your sketch setup()");
   Serial.print("  touch.setCal(");
-  Serial.print(xmin); Serial.print(", ");
-  Serial.print(xmax); Serial.print(", ");
-  Serial.print(ymin); Serial.print(", ");
-  Serial.print(ymax); Serial.print(", ");
-  Serial.print(240); Serial.print(", ");
-  Serial.print(320);
+  Serial.print(hmin); Serial.print(", ");
+  Serial.print(hmax); Serial.print(", ");
+  Serial.print(vmin); Serial.print(", ");
+  Serial.print(vmax); Serial.print(", ");
+  Serial.print(HRES); Serial.print(", ");
+  Serial.print(VRES); Serial.print(", ");
+  Serial.print(xyswap); //Serial.print(", ");
+  //Serial.print(xflip); Serial.print(", ");
+  //Serial.print(yflip);
   Serial.println(");");
 
   Serial.println();
@@ -203,8 +206,7 @@ void loop()
   Serial.println("Send any character from the serial monitor window to restart calibration");
 
   // These are the calibration settings the sketch has calculated to try out!
-  touch.setCal(xmin, xmax, ymin, ymax, 240, 320); // Raw xmin, xmax, ymin, ymax, width, height
-
+  touch.setCal(hmin, hmax, vmin, vmax, HRES, VRES, xyswap);//, xflip, yflip); // Raw xmin, xmax, ymin, ymax, 320, 240, XYswap, xflip, yflip
 
   // Keep TFT and Touch rotations the same, try values 0 to 3
   // Start with the current orientation
@@ -224,6 +226,8 @@ void loop()
   tft.setRotation(0);
   touch.setRotation(0);
   test();
+
+  Serial.println();
 }
 
 void test(void)

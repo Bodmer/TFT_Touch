@@ -29,18 +29,25 @@ class TFT_Touch
   uint32_t Zone(void);
 
   void setResolution(uint16_t xres, uint16_t yres);
-  void setCal(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax, uint16_t xres, uint16_t yres);
+  void setCal(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ymax, uint16_t xres, uint16_t yres, boolean axis);//, boolean xflip, boolean yflip);
   void setRotation(byte rotation);
 
+  int16_t ReadCal(byte param);
+
+  uint16_t _hmin, _hmax, _vmin, _vmax, _hres, _vres;
+  boolean _axis, _xyswap, _xflip, _yflip;
+
   private:
+
   int16_t _ReadAxis(boolean Axis);
+
   byte _CS;
   byte _Clk;
   byte _Din;
   byte _Dout;
-  uint16_t _xmin, _xmax, _ymin, _ymax, _xres, _yres;
+
   int16_t _xraw, _yraw, _xcoord, _ycoord;
-  boolean _axis, _xflip, _yflip;
+  //boolean _XYswap, _Xflip, _Yflip;
   
   void _PulseClock(void);
   uint16_t _ReadData(void);

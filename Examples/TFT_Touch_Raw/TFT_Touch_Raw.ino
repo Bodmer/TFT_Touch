@@ -20,7 +20,7 @@ it is intended for providing touch screen support to any graphics sketches and l
 However the library will work standalone as this example sketch will demonstrate.
 
 The example will read the current state of the touch screen and output it to the serial
-port as raw X and Y coordinates, as the current position in pixels, and as a zone number.
+port as raw X and Y coordinates.
 
 No information will be displayed on the TFT screen itself whilst this example is running.
 
@@ -40,21 +40,22 @@ Adapted by Rowboteer 13/5/15
 */
 
 // These are the pins used to interface between the 2046 touch controller and Arduino Mega
-#define DOUT A0  /* Data out pin of touch screen */
-#define DIN  A1  /* Data in pin of touch screen */
-#define DCS  A2  /* Chip select pin of touch screen */
-#define DCLK A3  /* Clock pin of touch screen */
+#define DOUT A0  /* Data out pin (T_DO) of touch screen */
+#define DIN  A2  /* Data in pin (T_DIN) of touch screen */
+#define DCS  9  /* Chip select pin (T_CS) of touch screen */
+#define DCLK 8  /* Clock pin (T_CLK) of touch screen */
 
 // These are the default min and maximum values, set to 0 and 4095 to test the screen
-#define XMIN 0
-#define XMAX 4095
-#define YMIN 0
-#define YMAX 4095
+#define HMIN 0
+#define HMAX 4095
+#define VMIN 0
+#define VMAX 4095
+#define XYSWAP 0 // 0 or 1
 
 // This is the screen size for the raw to coordinate transformation
-// width and height specified for portrait orientation
-#define XRES 240 /* Default screen resulution for X axis */
-#define YRES 320 /* Default screen resulution for Y axis */
+// width and height specified for landscape orientation
+#define HRES 320 /* Default screen resulution for X axis */
+#define VRES 320 /* Default screen resulution for Y axis */
 
 #include <TFT_Touch.h>
 
@@ -64,7 +65,7 @@ TFT_Touch touch = TFT_Touch(DCS, DCLK, DIN, DOUT);
 void setup()
 {
   Serial.begin(38400);
-  touch.setCal(XMIN, XMAX, YMIN, YMAX, XRES, YRES); // Raw xmin, xmax, ymin, ymax, width, height
+  touch.setCal(HMIN, HMAX, VMIN, VMAX, HRES, VRES, XYSWAP); // Raw xmin, xmax, ymin, ymax, width, height
   touch.setRotation(1);
 }
 
