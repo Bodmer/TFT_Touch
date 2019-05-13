@@ -10,7 +10,7 @@ Open up the Serial Monitor Window from the IDE and set to 38400 baud to see the
 information from screen contacts
 
 By using a stylus at the screen extremes or touch zone limits this sketch can be
-used to check tha calibration values.
+used to check then calibration values.
 
 IMPORTANT: The 2.4" screen orientation used for calibration is with the SD Card slot on the left!
 
