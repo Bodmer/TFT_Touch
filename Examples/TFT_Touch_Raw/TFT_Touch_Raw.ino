@@ -10,7 +10,7 @@ Open up the Serial Monitor Window from the IDE and set to 38400 baud to see the
 information from screen contacts
 
 By using a stylus at the screen extremes or touch zone limits this sketch can be
-used to check tha calibration values.
+used to check then calibration values.
 
 IMPORTANT: The 2.4" screen orientation used for calibration is with the SD Card slot on the left!
 
@@ -54,8 +54,8 @@ Adapted by Rowboteer 13/5/15
 
 // This is the screen size for the raw to coordinate transformation
 // width and height specified for landscape orientation
-#define HRES 320 /* Default screen resulution for X axis */
-#define VRES 320 /* Default screen resulution for Y axis */
+#define HRES 320 /* Default screen resolution for X axis */
+#define VRES 320 /* Default screen resolution for Y axis */
 
 #include <TFT_Touch.h>
 

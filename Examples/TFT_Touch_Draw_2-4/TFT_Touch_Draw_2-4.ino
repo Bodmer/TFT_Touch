@@ -37,7 +37,7 @@ TFT_Touch touch = TFT_Touch(DCS, DCLK, DIN, DOUT);
 int ColorPaletteHigh = 30; // Height of palette boxes
 int color = TFT_WHITE;     //Starting paint brush color
 
-// Pallete button colour sequence
+// Palette button colour sequence
 unsigned int colors[10] = {TFT_RED, TFT_GREEN, TFT_BLUE, TFT_BLACK, TFT_CYAN, TFT_YELLOW, TFT_WHITE, TFT_MAGENTA, TFT_BLACK, TFT_BLACK};
 
 void setup()
