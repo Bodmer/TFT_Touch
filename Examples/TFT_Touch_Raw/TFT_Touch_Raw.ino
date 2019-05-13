@@ -54,8 +54,8 @@ Adapted by Rowboteer 13/5/15
 
 // This is the screen size for the raw to coordinate transformation
 // width and height specified for landscape orientation
-#define HRES 320 /* Default screen resulution for X axis */
-#define VRES 320 /* Default screen resulution for Y axis */
+#define HRES 320 /* Default screen resolution for X axis */
+#define VRES 320 /* Default screen resolution for Y axis */
 
 #include <TFT_Touch.h>
 
