@@ -255,6 +255,7 @@ void TFT_Touch::setCal(uint16_t hmin, uint16_t hmax,
     //  return _yflip;
     //  break;
   }
+  return 0;
 }
 void TFT_Touch::setRotation(byte rotation)
 {
